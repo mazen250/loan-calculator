@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Modal, Input, Form, message } from "antd";
+import { Button, Modal, Input, Form, message, ConfigProvider } from "antd";
 import axios from "axios";
 import "./index.css";
 import { CiCalculator1 } from "react-icons/ci";
@@ -95,145 +95,156 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen p-4 flex items-center justify-center">
-      <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg overflow-hidden p-6 py-10">
-        <div className="p-4">
-          <h2 className="text-2xl font-bold text-center mb-4">
-            Loan Calculator
-          </h2>
-          <div className="flex justify-center gap-4 flex-col md:flex-row">
-            <Button
-              type="primary"
-              icon={<FaDollarSign />}
-              onClick={showMaxLimitModal}
-            >
-              Calculate Max Limit
-            </Button>
-            <Button
-              type="default"
-              icon={<CiCalculator1 />}
-              onClick={showMonthlyPaymentModal}
-            >
-              Calculate Monthly Payment
-            </Button>
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: "#01700a",
+        },
+      }}
+    >
+      <div className="min-h-screen p-4 flex items-center justify-center">
+        <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg overflow-hidden p-6 py-10">
+          <div className="p-4">
+            <h2 className="text-2xl font-bold text-center mb-4">
+              Loan Calculator
+            </h2>
+            <div className="flex justify-center gap-4 flex-col md:flex-row">
+              <Button
+                type="primary"
+                icon={<FaDollarSign />}
+                onClick={showMaxLimitModal}
+              >
+                Calculate Max Limit
+              </Button>
+              <Button
+                type="default"
+                icon={<CiCalculator1 />}
+                onClick={showMonthlyPaymentModal}
+              >
+                Calculate Monthly Payment
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Modal for Max Limit Calculation */}
-      <Modal
-        title="Calculate Max Limit"
-        visible={isMaxLimitModalVisible}
-        onCancel={handleCancel}
-        footer={null}
-      >
-        <Form form={form} layout="vertical" onFinish={onCalculateMaxLimit}>
-          <Form.Item
-            label="Monthly Payment (EGP)"
-            name="monthlyPayment"
-            rules={[
-              { required: true, message: "Please enter your monthly payment!" },
-            ]}
-          >
-            <Input type="number" />
-          </Form.Item>
-          <Form.Item
-            label="Annual Interest Rate (%)"
-            name="annualInterestRate"
-            rules={[
-              {
-                required: true,
-                message: "Please enter the annual interest rate!",
-              },
-            ]}
-          >
-            <Input type="number" />
-          </Form.Item>
-          <Form.Item
-            label="Loan Term (Years)"
-            name="loanTermYears"
-            rules={[
-              {
-                required: true,
-                message: "Please enter the loan term in years!",
-              },
-            ]}
-          >
-            <Input type="number" />
-          </Form.Item>
-          <Button type="primary" htmlType="submit">
-            Calculate
-          </Button>
-        </Form>
-        {maxLimit && (
-          <div className="mt-4">
-            <h3>
-              Your Max Loan Limit: {new Intl.NumberFormat().format(maxLimit)}{" "}
-              EGP
-            </h3>
-          </div>
-        )}
-      </Modal>
-
-      {/* Modal for Monthly Payment Calculation */}
-      <Modal
-        title="Calculate Monthly Payment"
-        visible={isMonthlyPaymentModalVisible}
-        onCancel={handleCancel}
-        footer={null}
-      >
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={onCalculateMonthlyPayment}
+        {/* Modal for Max Limit Calculation */}
+        <Modal
+          title="Calculate Max Limit"
+          visible={isMaxLimitModalVisible}
+          onCancel={handleCancel}
+          footer={null}
         >
-          <Form.Item
-            label="Loan Amount (EGP)"
-            name="loanAmount"
-            rules={[
-              { required: true, message: "Please enter the loan amount!" },
-            ]}
+          <Form form={form} layout="vertical" onFinish={onCalculateMaxLimit}>
+            <Form.Item
+              label="Monthly Payment (EGP)"
+              name="monthlyPayment"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter your monthly payment!",
+                },
+              ]}
+            >
+              <Input type="number" />
+            </Form.Item>
+            <Form.Item
+              label="Annual Interest Rate (%)"
+              name="annualInterestRate"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter the annual interest rate!",
+                },
+              ]}
+            >
+              <Input type="number" />
+            </Form.Item>
+            <Form.Item
+              label="Loan Term (Years)"
+              name="loanTermYears"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter the loan term in years!",
+                },
+              ]}
+            >
+              <Input type="number" />
+            </Form.Item>
+            <Button type="primary" htmlType="submit">
+              Calculate
+            </Button>
+          </Form>
+          {maxLimit && (
+            <div className="mt-4">
+              <h3>
+                Your Max Loan Limit: {new Intl.NumberFormat().format(maxLimit)}{" "}
+                EGP
+              </h3>
+            </div>
+          )}
+        </Modal>
+
+        {/* Modal for Monthly Payment Calculation */}
+        <Modal
+          title="Calculate Monthly Payment"
+          visible={isMonthlyPaymentModalVisible}
+          onCancel={handleCancel}
+          footer={null}
+        >
+          <Form
+            form={form}
+            layout="vertical"
+            onFinish={onCalculateMonthlyPayment}
           >
-            <Input type="number" />
-          </Form.Item>
-          <Form.Item
-            label="Annual Interest Rate (%)"
-            name="annualInterestRate"
-            rules={[
-              {
-                required: true,
-                message: "Please enter the annual interest rate!",
-              },
-            ]}
-          >
-            <Input type="number" />
-          </Form.Item>
-          <Form.Item
-            label="Loan Term (Years)"
-            name="loanTermYears"
-            rules={[
-              {
-                required: true,
-                message: "Please enter the loan term in years!",
-              },
-            ]}
-          >
-            <Input type="number" />
-          </Form.Item>
-          <Button type="primary" htmlType="submit">
-            Calculate
-          </Button>
-        </Form>
-        {monthlyPayment && (
-          <div className="mt-4">
-            <h3>
-              Your Monthly Payment:{" "}
-              {new Intl.NumberFormat().format(monthlyPayment)} EGP
-            </h3>
-          </div>
-        )}
-      </Modal>
-    </div>
+            <Form.Item
+              label="Loan Amount (EGP)"
+              name="loanAmount"
+              rules={[
+                { required: true, message: "Please enter the loan amount!" },
+              ]}
+            >
+              <Input type="number" />
+            </Form.Item>
+            <Form.Item
+              label="Annual Interest Rate (%)"
+              name="annualInterestRate"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter the annual interest rate!",
+                },
+              ]}
+            >
+              <Input type="number" />
+            </Form.Item>
+            <Form.Item
+              label="Loan Term (Years)"
+              name="loanTermYears"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter the loan term in years!",
+                },
+              ]}
+            >
+              <Input type="number" />
+            </Form.Item>
+            <Button type="primary" htmlType="submit">
+              Calculate
+            </Button>
+          </Form>
+          {monthlyPayment && (
+            <div className="mt-4">
+              <h3>
+                Your Monthly Payment:{" "}
+                {new Intl.NumberFormat().format(monthlyPayment)} EGP
+              </h3>
+            </div>
+          )}
+        </Modal>
+      </div>
+    </ConfigProvider>
   );
 }
 
